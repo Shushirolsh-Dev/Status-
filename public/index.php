@@ -106,7 +106,6 @@ if ($method === 'POST') {
             $stmt = $pdo->prepare('INSERT INTO incidents (title, body, status, impact, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)');
             $stmt->execute([$title, $body, 'investigating', $impact, now(), now()]);
             $id = (int)$pdo->lastInsertId();
-            record_incident_update($id, $body, 'investigating');
             flash('Incident published to the status page.');
         }
         redirect('/admin');
