@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: status
+    runtime: docker
+    plan: starter
+    healthCheckPath: /
+    envVars:
+      - key: STATUS_ADMIN_PASSWORD
+        sync: false
+      - key: STATUS_DB_PATH
+        value: /var/data/status.sqlite
+      - key: STATUS_TIMEZONE
+        value: UTC
+      - key: STATUS_APP_NAME
+        value: Status
+    disk:
+      name: status-data
+      mountPath: /var/data
+      sizeGB: 1
