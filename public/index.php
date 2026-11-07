@@ -65,7 +65,7 @@ if ($method === 'POST') {
     if ($action === 'add_service') {
         $name = trim((string)($_POST['name'] ?? ''));
         $description = trim((string)($_POST['description'] ?? ''));
-        if ($name === '' || mb_strlen($name) > 80 || mb_strlen($description) > 180) {
+        if ($name === '' || strlen($name) > 80 || strlen($description) > 180) {
             flash('Enter a service name (max 80 characters) and description (max 180).', 'error');
         } else {
             $stmt = $pdo->prepare('INSERT INTO services (name, description, status, position, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)');
@@ -100,7 +100,7 @@ if ($method === 'POST') {
         $title = trim((string)($_POST['title'] ?? ''));
         $body = trim((string)($_POST['body'] ?? ''));
         $impact = (string)($_POST['impact'] ?? 'minor');
-        if ($title === '' || $body === '' || mb_strlen($title) > 120 || mb_strlen($body) > 2000 || !in_array($impact, ['minor','major','critical','maintenance'], true)) {
+        if ($title === '' || $body === '' || strlen($title) > 120 || strlen($body) > 2000 || !in_array($impact, ['minor','major','critical','maintenance'], true)) {
             flash('Add a valid title, update, and impact level.', 'error');
         } else {
             $stmt = $pdo->prepare('INSERT INTO incidents (title, body, status, impact, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)');
@@ -116,7 +116,7 @@ if ($method === 'POST') {
         $id = filter_var($_POST['incident_id'] ?? null, FILTER_VALIDATE_INT);
         $status = (string)($_POST['status'] ?? '');
         $body = trim((string)($_POST['body'] ?? ''));
-        if ($id && in_array($status, ['investigating','identified','monitoring','resolved'], true) && $body !== '' && mb_strlen($body) <= 2000) {
+        if ($id && in_array($status, ['investigating','identified','monitoring','resolved'], true) && $body !== '' && strlen($body) <= 2000) {
             $stmt = $pdo->prepare('UPDATE incidents SET status = ?, updated_at = ?, resolved_at = ? WHERE id = ?');
             $stmt->execute([$status, now(), $status === 'resolved' ? now() : null, $id]);
             record_incident_update($id, $body, $status);
